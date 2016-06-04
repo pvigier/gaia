@@ -1,7 +1,6 @@
-from scipy.spatial import Voronoi, voronoi_plot_2d
+from scipy.spatial import Voronoi
 import numpy as np
 import matplotlib.pyplot as plt
-from noise import pnoise2, snoise2
 
 class Diagram:
 	def __init__(self, points=None, vertices=None, ridge_points=None, ridge_vertices=None, regions=None, point_region=None):
@@ -18,8 +17,6 @@ class Diagram:
 
 	def plot(self):
 		plt.figure()
-		#plt.xlim(x_min - 0.5, x_max + 0.5)
-		#plt.ylim(y_min - 0.5, y_max + 0.5)
 		plt.gca().set_aspect('equal', adjustable='box')
 		for (v1, v2) in self.ridge_vertices:
 			x1, x2, y1, y2 = self.vertices[v1][0], self.vertices[v2][0], self.vertices[v1][1], self.vertices[v2][1]
@@ -84,14 +81,3 @@ def generate_diagram():
 	plt.show()
 
 generate_diagram()
-
-size = 256
-octaves = 1
-freq = 64.0 * octaves
-noise = np.zeros((size, size), dtype=np.int8)
-for i in range(size):
-	for j in range(size):
-		noise[i, j] = pnoise2(j / freq, i / freq, octaves) * 127.0
-#noise = noise  * (noise > 0)
-plt.imshow(noise, cmap='gray')
-plt.show()
