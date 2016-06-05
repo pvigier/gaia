@@ -64,7 +64,6 @@ def bounded_voronoi(points):
 		point1_valid = (i_point1 >= 0 and i_point1 < len(points))
 		point2_valid = (i_point2 >= 0 and i_point2 < len(points))
 		if point1_valid or point2_valid:
-			diagram.ridge_points.append([i_point1, i_point2])
 			for i_vertex in i_vertices:
 				if not i_vertex in new_indices:
 					new_indices[i_vertex] = len(diagram.vertices)
@@ -73,11 +72,22 @@ def bounded_voronoi(points):
 			# Check if one point is a border point
 			if point1_valid and not point2_valid:
 				diagram.is_border[i_point1] = True
+				i_point2 = -1
 			elif point2_valid and not point1_valid:
 				diagram.is_border[i_point2] = True
+				i_point1 = -1
+			diagram.ridge_points.append([i_point1, i_point2])
 	for i_point, i_region in enumerate(vor.point_region[:len(points)]):
 		region = vor.regions[i_region]
 		diagram.regions.append([new_indices[i_vertex] for i_vertex in region])
+	return diagram
+
+def get_relaxed_voronoi(nb_points=128, nb_iter=2):
+	points = np.random.rand(nb_points, 2)
+	diagram = bounded_voronoi(points)
+	for _ in range(nb_iter):
+		points = diagram.lloyd_algorithm()
+		diagram = bounded_voronoi(points)
 	return diagram
 
 def plot_diagram(nb_points=128, nb_iter=2):	
