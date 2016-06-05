@@ -29,7 +29,7 @@ def get_noise(size, freq, octaves, persistence):
 def generate_coast_mask(size, freq=1, octaves=32, persistence=0.5, threshold=128, kernel=uniform_kernel):
 	return (get_noise(size, freq, octaves, persistence) * get_weights(size, kernel)) >= threshold
 
-def plot_coast(size, freq=1, octaves=32, persistence=0.5, threshold=100, kernel=uniform_kernel):
+def plot_coasts(size=256, freq=1, octaves=32, persistence=0.5, threshold=100, kernel=uniform_kernel):
 	perlin = get_noise(size, freq, octaves, persistence)
 	weights = get_weights(size, kernel)
 	weighted_perlin = perlin * weights
@@ -45,4 +45,4 @@ def plot_coast(size, freq=1, octaves=32, persistence=0.5, threshold=100, kernel=
 	plt.show()
 
 if __name__ == '__main__':
-	plot_coast(256, 4, 16, 0.5, 100, gaussian_kernel(0.4))
+	plot_coasts(256, 4, 16, 0.5, 100, gaussian_kernel(0.4))

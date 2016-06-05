@@ -191,7 +191,7 @@ class World:
 		return 0 <= i < self.width and 0 <= j < self.height
 
 world = World()
-n_step = 10000
+n_step = 1000
 T = np.arange(n_step)
 N_plants = np.zeros(n_step)
 N_herbivores = np.zeros(n_step)
