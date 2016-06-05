@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 from diagram import get_relaxed_voronoi
-from coast import generate_coast_mask, gaussian_kernel
+from coasts import generate_coast_mask, gaussian_kernel
 
 colors = {'WATER': 'b', 'LAND': 'g'}
 
