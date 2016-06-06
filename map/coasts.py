@@ -8,7 +8,7 @@ def uniform_kernel():
 	return lambda x: 1
 
 def gaussian_kernel(sigma):
-	return lambda x: np.exp(-x**2/(2 * sigma ** 2))
+	return lambda x: np.exp(-x**2 / (2 * sigma ** 2))
 
 def get_weights(size, kernel):
 	weights = np.zeros((size, size))

@@ -4,14 +4,14 @@ from matplotlib.patches import Polygon
 from diagram import get_relaxed_voronoi
 from coasts import generate_coast_mask, gaussian_kernel
 
-colors = {'WATER': 'b', 'LAND': 'g'}
+colors = {'SEA': 'b', 'LAND': 'g', 'LAKE': '#50a0b0'}
 
 class Region:
     def __init__(self, point, vertices=None, is_border=False):
         self.point = point # ID
         self.vertices = vertices or [] # IDs
         self.adjacent_regions = {} # {i_point: i_ridge}
-        self.biome = 'WATER'
+        self.biome = 'LAKE'
         self.is_border = is_border
 
 class Map:
@@ -28,17 +28,34 @@ class Map:
         for i_point, (i_vertices, is_border) in enumerate(zip(diagram.regions, diagram.is_border)):
             self.regions.append(Region(i_point, i_vertices, is_border))
         for i_ridge, (i_point1, i_point2) in enumerate(diagram.ridge_points):
-            self.regions[i_point1].adjacent_regions[i_point2] = i_ridge
-            self.regions[i_point2].adjacent_regions[i_point1] = i_ridge
+            if i_point1 >= 0:
+                self.regions[i_point1].adjacent_regions[i_point2] = i_ridge
+            if i_point2 >= 0:
+                self.regions[i_point2].adjacent_regions[i_point1] = i_ridge
 
     def set_coasts(self, mask):
         size = mask.shape[0]
         for region in self.regions:
             #if region.is_border:
-            #    self.regions[-1].biome = 'WATER'
+            #    self.regions[-1].biome = 'SEA'
             x, y = self.points[region.point] * size
             if mask[int(y), int(x)]:
                 region.biome = 'LAND'
+        self.set_lake()
+
+    def set_lake(self):
+        to_see = []
+        for i, region in enumerate(self.regions):
+            if region.is_border:
+                to_see.append(i)
+        while to_see:
+            region = self.regions[to_see.pop()]
+            region.biome = 'SEA'
+            for i in region.adjacent_regions:
+                if i >= 0:
+                    adjacent_region = self.regions[i]
+                    if adjacent_region.biome == 'LAKE':
+                        to_see.append(i)
 
     def plot(self, ax=None):
         ax = ax or plt.subplot('111')

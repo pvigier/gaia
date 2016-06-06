@@ -25,7 +25,7 @@ class Diagram:
 				plt.scatter(x, y, c='r')
 			else:
 				plt.scatter(x, y)
-			#plt.annotate(str(i), xy=(x, y), xytext=(5, 2), textcoords='offset points', ha='right', va='bottom')
+			plt.annotate(str(i), xy=(x, y), xytext=(5, 2), textcoords='offset points', ha='right', va='bottom')
 		for i, (x, y) in enumerate(self.vertices):
 			plt.scatter(x, y, c='g')
 			#plt.annotate(str(i), xy=(x, y), xytext=(5, 2), textcoords='offset points', ha='right', va='bottom')
